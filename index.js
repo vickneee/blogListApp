@@ -3,6 +3,9 @@ import express from 'express'
 const app = express()
 import cors from 'cors'
 import mongoose from "mongoose";
+import dotenv from 'dotenv';
+dotenv.config();
+
 
 const blogSchema = new mongoose.Schema({
   title: String,
