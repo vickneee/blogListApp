@@ -1,8 +1,6 @@
 const Blog = require("../models/blogModel");
 const express = require("express");
 
-const baseUrl = 'localhost:3001/';
-
 const app = express();
 
 const getAllBlogs = app.get('/api/blogs', (request, response) => {
