@@ -3,7 +3,7 @@ const app = express()
 const cors = require('cors')
 const mongoose = require('mongoose')
 const dotenv = require('dotenv')
-const {createBlog, getAllBlogs} = require("./controllers/blogController");
+const {getHomePage, createBlog, getAllBlogs} = require("./controllers/blogController");
 
 // Load env variables
 dotenv.config()
@@ -22,6 +22,7 @@ mongoose.connect(MONGODB_URI)
   })
 
 // Routes
+app.get('/', getHomePage)
 app.get('/api/blogs', getAllBlogs)
 app.post('/api/blogs', createBlog)
 

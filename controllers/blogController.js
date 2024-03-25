@@ -3,6 +3,14 @@ const express = require("express");
 
 const app = express();
 
+const getHomePage = app.get('/', async (request, response) => {
+  try {
+    await response.send('<h1>Welcome to BlogList App!</h1>');
+  } catch (error) {
+    console.log(error);
+  }
+})
+
 const getAllBlogs = app.get('/api/blogs', (request, response) => {
   Blog
     .find({})
@@ -22,6 +30,7 @@ const createBlog = app.post('/api/blogs', (request, response) => {
 })
 
 module.exports = {
+  getHomePage,
   getAllBlogs,
   createBlog
 }
