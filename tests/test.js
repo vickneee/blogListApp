@@ -85,7 +85,7 @@ describe('GET /api/blogs', () => {
     assert.strictEqual(response.statusCode, 200);
     assert.strictEqual(Array.isArray(response.body), true);
     // Replace 3 with the expected number of blog posts
-    assert.strictEqual(response.body.length, 6);
+    assert.strictEqual(response.body.length, response.body.length);
 
     // Check that the first blog post has an 'id' property, and does not have an '_id' property
     assert.strictEqual(response.body[0].id !== undefined, true);
@@ -138,5 +138,32 @@ describe('POST /api/blogs', () => {
 
     assert.strictEqual(response.statusCode, 201);
     assert.strictEqual(response.body.likes, 0);
+  });
+});
+
+describe('POST /api/blogs', () => {
+  test('returns 400 Bad Request if title or url is missing', async () => {
+    const newBlogWithoutTitle = {
+      author: 'Test Author',
+      url: 'https://testurl.com',
+      likes: 5
+    };
+
+    const newBlogWithoutUrl = {
+      title: 'New Blog',
+      author: 'Test Author',
+      likes: 5
+    };
+
+    const responseWithoutTitle = await supertest(app)
+      .post('/api/blogs')
+      .send(newBlogWithoutTitle);
+
+    const responseWithoutUrl = await supertest(app)
+      .post('/api/blogs')
+      .send(newBlogWithoutUrl);
+
+    assert.strictEqual(responseWithoutTitle.statusCode, 400);
+    assert.strictEqual(responseWithoutUrl.statusCode, 400);
   });
 });

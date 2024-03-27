@@ -22,6 +22,9 @@ const getAllBlogs = app.get('/api/blogs', async (request, response) => {
 })
 
 const createBlog = app.post('/api/blogs', async (request, response) => {
+  if (!request.body.title || !request.body.url) {
+    return response.status(400).send({ error: 'title or url missing' });
+  }
   try {
     const newBlog = new Blog({
       title: request.body.title,
