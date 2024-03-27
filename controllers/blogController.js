@@ -3,6 +3,7 @@ const express = require("express");
 
 const app = express();
 
+// Get home page
 const getHomePage = app.get('/', async (request, response) => {
   try {
     await response.send('<h1>Welcome to BlogList App!</h1>');
@@ -11,6 +12,7 @@ const getHomePage = app.get('/', async (request, response) => {
   }
 })
 
+// Get all blogs
 const getAllBlogs = app.get('/api/blogs', async (request, response) => {
   try {
     const blogs = await Blog.find({});
@@ -21,6 +23,7 @@ const getAllBlogs = app.get('/api/blogs', async (request, response) => {
   }
 })
 
+// Create a new blog
 const createBlog = app.post('/api/blogs', async (request, response) => {
   if (!request.body.title || !request.body.url) {
     return response.status(400).send({ error: 'title or url missing' });
@@ -40,8 +43,20 @@ const createBlog = app.post('/api/blogs', async (request, response) => {
   }
 })
 
+// Delete a blog
+const deleteBlog = app.delete('/api/blogs/:id', async (request, response) => {
+  try {
+    await Blog.findByIdAndRemove(request.params.id);
+    response.status(204).end();
+  }
+  catch (error) {
+    console.log(error);
+  }
+})
+
 module.exports = {
   getHomePage,
   getAllBlogs,
-  createBlog
+  createBlog,
+  deleteBlog
 }

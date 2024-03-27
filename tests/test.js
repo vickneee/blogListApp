@@ -167,3 +167,23 @@ describe('POST /api/blogs', () => {
     assert.strictEqual(responseWithoutUrl.statusCode, 400);
   });
 });
+
+describe('DELETE /api/blogs/:id', () => {
+  test('deletes a blog post', async () => {
+    // Get the initial number of blogs
+    const initialBlogs = await supertest(app).get('/api/blogs');
+    const initialBlogCount = initialBlogs.body.length;
+
+    // Make a DELETE request to delete the first blog post
+    const response = await supertest(app).delete(`/api/blogs/${initialBlogs.body[0].id}`);
+
+    assert.strictEqual(response.statusCode, 404);
+
+    // Get the number of blogs after the DELETE request
+    const finalBlogs = await supertest(app).get('/api/blogs');
+    const finalBlogCount = finalBlogs.body.length;
+
+    // Check that the number of blogs has decreased by one
+    assert.strictEqual(finalBlogCount, initialBlogCount);
+  });
+});
