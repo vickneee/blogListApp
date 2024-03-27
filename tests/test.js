@@ -61,7 +61,7 @@ describe('total likes', () => {
     }
   ]
 
-  test('when list has only one blog, equals the likes of that', () => {
+  test('returns 36', () => {
     const result = listHelper.totalLikes(blogs)
     assert.strictEqual(result, 36)
   })
