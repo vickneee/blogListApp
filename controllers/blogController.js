@@ -23,6 +23,20 @@ const getAllBlogs = app.get('/api/blogs', async (request, response) => {
   }
 })
 
+// Get a single blog
+const getSingleBlog = app.get('/api/blogs/:id', async (request, response) => {
+  try {
+    const blog = await Blog.findById(request.params.id);
+    if (blog) {
+      response.json(blog);
+    } else {
+      response.status(404).end();
+    }
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 // Create a new blog
 const createBlog = app.post('/api/blogs', async (request, response) => {
   if (!request.body.title || !request.body.url) {
@@ -46,17 +60,41 @@ const createBlog = app.post('/api/blogs', async (request, response) => {
 // Delete a blog
 const deleteBlog = app.delete('/api/blogs/:id', async (request, response) => {
   try {
-    await Blog.findByIdAndRemove(request.params.id);
+    const blog = await Blog.findById(request.params.id);
+    if (!blog) {
+      return response.status(404).send({ error: 'blog not found' });
+    }
+    await Blog.findByIdAndDelete(request.params.id);
     response.status(204).end();
-  }
-  catch (error) {
+  } catch (error) {
     console.log(error);
   }
-})
+});
+
+// Update a blog
+const updateBlog = app.put('/api/blogs/:id', async (request, response) => {
+  const body = request.body;
+
+  const blog = {
+    title: body.title,
+    author: body.author,
+    url: body.url,
+    likes: body.likes
+  }
+
+  try {
+    const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true });
+    response.json(updatedBlog);
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 module.exports = {
   getHomePage,
   getAllBlogs,
+  getSingleBlog,
   createBlog,
-  deleteBlog
+  deleteBlog,
+  updateBlog
 }

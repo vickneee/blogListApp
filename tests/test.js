@@ -3,6 +3,7 @@ const assert = require('assert')
 const listHelper = require('../utils/list_helper')
 const supertest = require('supertest')
 const app = require('../index.js')
+const Blog = require('../models/blogModel')
 
 test('dummy returns one', () => {
   const blogs = []
@@ -124,6 +125,7 @@ describe('GET /api/blogs', () => {
 //   });
 // });
 
+// POST /api/blogs
 describe('POST /api/blogs', () => {
   test('defaults likes to 0 if missing from request', async () => {
     const newBlog = {
@@ -141,6 +143,7 @@ describe('POST /api/blogs', () => {
   });
 });
 
+// POST /api/blogs
 describe('POST /api/blogs', () => {
   test('returns 400 Bad Request if title or url is missing', async () => {
     const newBlogWithoutTitle = {
@@ -168,22 +171,25 @@ describe('POST /api/blogs', () => {
   });
 });
 
+// DELETE /api/blogs/:id
 describe('DELETE /api/blogs/:id', () => {
   test('deletes a blog post', async () => {
-    // Get the initial number of blogs
-    const initialBlogs = await supertest(app).get('/api/blogs');
-    const initialBlogCount = initialBlogs.body.length;
+    // Create a new blog post
+    const newBlog = new Blog({
+      title: 'Blog to delete',
+      author: 'Test Author',
+      url: 'https://testurl.com',
+      likes: 5
+    });
+    const createdBlog = await newBlog.save();
 
-    // Make a DELETE request to delete the first blog post
-    const response = await supertest(app).delete(`/api/blogs/${initialBlogs.body[0].id}`);
+    // Delete the blog post
+    const response = await supertest(app).delete(`/api/blogs/${createdBlog.id}`);
 
-    assert.strictEqual(response.statusCode, 404);
+    assert.strictEqual(response.statusCode, 204);
 
-    // Get the number of blogs after the DELETE request
-    const finalBlogs = await supertest(app).get('/api/blogs');
-    const finalBlogCount = finalBlogs.body.length;
-
-    // Check that the number of blogs has decreased by one
-    assert.strictEqual(finalBlogCount, initialBlogCount);
+    // Check that the blog post was deleted
+    const blogPostAfterDelete = await Blog.findById(createdBlog.id);
+    assert.strictEqual(blogPostAfterDelete, null);
   });
 });
