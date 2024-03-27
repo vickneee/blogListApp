@@ -193,3 +193,35 @@ describe('DELETE /api/blogs/:id', () => {
     assert.strictEqual(blogPostAfterDelete, null);
   });
 });
+
+// PUT /api/blogs/:id
+describe('PUT /api/blogs/:id', () => {
+  test('updates a blog post', async () => {
+    // Create a new blog post
+    const newBlog = new Blog({
+      title: 'Blog to update',
+      author: 'Test Author',
+      url: 'https://testurl.com',
+      likes: 5
+    });
+    const createdBlog = await newBlog.save();
+
+    // Update the blog post
+    const updatedBlogData = {
+      title: 'Updated blog',
+      author: 'Updated Author',
+      url: 'https://updatedurl.com',
+      likes: 10
+    };
+    const response = await supertest(app)
+      .put(`/api/blogs/${createdBlog.id}`)
+      .send(updatedBlogData);
+
+    assert.strictEqual(response.statusCode, 200);
+    assert.deepStrictEqual(response.body, { ...updatedBlogData, id: response.body.id });
+
+    // Check that the blog post was updated
+    const updatedBlog = await Blog.findById(createdBlog.id);
+    assert.deepStrictEqual(updatedBlog.toJSON(), { ...updatedBlogData, id: updatedBlog.id });
+  });
+});
