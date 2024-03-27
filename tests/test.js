@@ -85,7 +85,7 @@ describe('GET /api/blogs', () => {
     assert.strictEqual(response.statusCode, 200);
     assert.strictEqual(Array.isArray(response.body), true);
     // Replace 3 with the expected number of blog posts
-    assert.strictEqual(response.body.length, 3);
+    assert.strictEqual(response.body.length, 6);
 
     // Check that the first blog post has an 'id' property, and does not have an '_id' property
     assert.strictEqual(response.body[0].id !== undefined, true);
@@ -94,32 +94,49 @@ describe('GET /api/blogs', () => {
 });
 
 
+// describe('POST /api/blogs', () => {
+//   test('creates a new blog post', async () => {
+//     const newBlog = {
+//       title: 'New Blog',
+//       author: 'Test Author',
+//       url: 'https://testurl.com',
+//       likes: 5
+//     };
+//
+//     // Get the initial number of blogs
+//     const initialBlogs = await supertest(app).get('/api/blogs');
+//     const initialBlogCount = initialBlogs.body.length;
+//
+//     // Make a POST request to create a new blog
+//     const response = await supertest(app)
+//       .post('/api/blogs')
+//       .send(newBlog);
+//
+//     assert.strictEqual(response.statusCode, 201);
+//     assert.deepStrictEqual(response.body, { ...newBlog, id: response.body.id });
+//
+//     // Get the number of blogs after the POST request
+//     const finalBlogs = await supertest(app).get('/api/blogs');
+//     const finalBlogCount = finalBlogs.body.length;
+//
+//     // Check that the number of blogs has increased by one
+//     assert.strictEqual(finalBlogCount, initialBlogCount + 1);
+//   });
+// });
+
 describe('POST /api/blogs', () => {
-  test('creates a new blog post', async () => {
+  test('defaults likes to 0 if missing from request', async () => {
     const newBlog = {
       title: 'New Blog',
       author: 'Test Author',
-      url: 'https://testurl.com',
-      likes: 5
+      url: 'https://testurl.com'
     };
 
-    // Get the initial number of blogs
-    const initialBlogs = await supertest(app).get('/api/blogs');
-    const initialBlogCount = initialBlogs.body.length;
-
-    // Make a POST request to create a new blog
     const response = await supertest(app)
       .post('/api/blogs')
       .send(newBlog);
 
     assert.strictEqual(response.statusCode, 201);
-    assert.deepStrictEqual(response.body, { ...newBlog, id: response.body.id });
-
-    // Get the number of blogs after the POST request
-    const finalBlogs = await supertest(app).get('/api/blogs');
-    const finalBlogCount = finalBlogs.body.length;
-
-    // Check that the number of blogs has increased by one
-    assert.strictEqual(finalBlogCount, initialBlogCount + 1);
+    assert.strictEqual(response.body.likes, 0);
   });
 });

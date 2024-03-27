@@ -23,12 +23,14 @@ const getAllBlogs = app.get('/api/blogs', async (request, response) => {
 
 const createBlog = app.post('/api/blogs', async (request, response) => {
   try {
-    if (!request.body.title || !request.body.author || !request.body.url) {
-      return response.status(400).json({ error: 'missing title, author or url' })
-    }
-    const blog = new Blog(request.body)
-    const savedBlog = await blog.save()
-    response.status(201).json(savedBlog)
+    const newBlog = new Blog({
+      title: request.body.title,
+      author: request.body.author,
+      url: request.body.url,
+      likes: request.body.likes || 0
+  });
+  const savedBlog = await newBlog.save();
+  response.status(201).json(savedBlog);
   }
   catch (error) {
     console.log(error);
