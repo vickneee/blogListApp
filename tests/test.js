@@ -86,5 +86,9 @@ describe('GET /api/blogs', () => {
     assert.strictEqual(Array.isArray(response.body), true);
     // Replace 3 with the expected number of blog posts
     assert.strictEqual(response.body.length, 3);
+
+    // Check that the first blog post has an 'id' property, and does not have an '_id' property
+    assert.strictEqual(response.body[0].id !== undefined, true);
+    assert.strictEqual(response.body[0]._id, undefined);
   });
 });
