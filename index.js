@@ -26,6 +26,8 @@ app.get('/', getHomePage)
 app.get('/api/blogs', getAllBlogs)
 app.post('/api/blogs', createBlog)
 
+module.exports = app;
+
 // PORT 3003
 const PORT = process.env.PORT || 3003
 app.listen(PORT, () => {

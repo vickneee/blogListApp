@@ -1,6 +1,8 @@
 const { test, describe } = require('node:test')
-const assert = require('node:assert')
+const assert = require('assert')
 const listHelper = require('../utils/list_helper')
+const supertest = require('supertest')
+const app = require('../index.js')
 
 test('dummy returns one', () => {
   const blogs = []
@@ -75,3 +77,14 @@ describe('total likes', () => {
     })
   })
 })
+
+describe('GET /api/blogs', () => {
+  test('returns the correct amount of blog posts in JSON format', async () => {
+    const response = await supertest(app).get('/api/blogs');
+
+    assert.strictEqual(response.statusCode, 200);
+    assert.strictEqual(Array.isArray(response.body), true);
+    // Replace 3 with the expected number of blog posts
+    assert.strictEqual(response.body.length, 3);
+  });
+});
