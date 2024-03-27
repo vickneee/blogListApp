@@ -92,3 +92,34 @@ describe('GET /api/blogs', () => {
     assert.strictEqual(response.body[0]._id, undefined);
   });
 });
+
+
+describe('POST /api/blogs', () => {
+  test('creates a new blog post', async () => {
+    const newBlog = {
+      title: 'New Blog',
+      author: 'Test Author',
+      url: 'https://testurl.com',
+      likes: 5
+    };
+
+    // Get the initial number of blogs
+    const initialBlogs = await supertest(app).get('/api/blogs');
+    const initialBlogCount = initialBlogs.body.length;
+
+    // Make a POST request to create a new blog
+    const response = await supertest(app)
+      .post('/api/blogs')
+      .send(newBlog);
+
+    assert.strictEqual(response.statusCode, 201);
+    assert.deepStrictEqual(response.body, { ...newBlog, id: response.body.id });
+
+    // Get the number of blogs after the POST request
+    const finalBlogs = await supertest(app).get('/api/blogs');
+    const finalBlogCount = finalBlogs.body.length;
+
+    // Check that the number of blogs has increased by one
+    assert.strictEqual(finalBlogCount, initialBlogCount + 1);
+  });
+});
