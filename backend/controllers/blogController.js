@@ -1,6 +1,7 @@
 const Blog = require("../models/blogModel");
 const User = require("../models/userModel");
 const express = require("express");
+const jwt = require('jsonwebtoken');
 
 const app = express();
 
@@ -40,13 +41,20 @@ const getSingleBlog = app.get('/api/blogs/:id', async (request, response) => {
 
 // Create a new blog
 const createBlog = app.post('/api/blogs', async (request, response) => {
-  if (!request.body.title || !request.body.url) {
-    return response.status(400).send({ error: 'title or url missing' });
-  }
-  try {
-    // Find the first user in the database
-    const user = await User.findOne();
+  const body = request.body;
 
+  const decodedToken = jwt.verify(request.token, process.env.SECRET);
+  if (!request.token || !decodedToken.id) {
+    return response.status(401).json({ error: 'token missing or invalid' });
+  }
+
+  const user = await User.findById(decodedToken.id);
+
+  if (!body.title || !body.url) {
+    return response.status(400).json({ error: 'title or url missing' });
+  }
+
+  try {
     const newBlog = new Blog({
       title: request.body.title,
       author: request.body.author,
@@ -69,6 +77,7 @@ const createBlog = app.post('/api/blogs', async (request, response) => {
   }
   catch (error) {
     console.log(error);
+    response.status(500).json({ error: "An Error occurred while creating the blog" });
   }
 })
 

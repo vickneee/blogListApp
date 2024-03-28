@@ -6,6 +6,7 @@ const dotenv = require('dotenv')
 const {getHomePage, createBlog, getAllBlogs, getSingleBlog, deleteBlog, updateBlog} = require("./controllers/blogController");
 const {createUser, getAllUsers} = require("./controllers/userController");
 const {loginUser} = require("./controllers/authController");
+const checkToken = require('./utils/checkToken')
 
 // Load env variables
 dotenv.config()
@@ -27,7 +28,7 @@ mongoose.connect(MONGODB_URI)
 app.get('/', getHomePage);
 app.get('/api/blogs', getAllBlogs);
 app.get('/api/blogs/:id', getSingleBlog);
-app.post('/api/blogs', createBlog);
+app.post('/api/blogs', checkToken, createBlog);
 app.delete('/api/blogs/:id', deleteBlog);
 app.put('/api/blogs/:id', updateBlog);
 app.get('/api/users/', getAllUsers);
