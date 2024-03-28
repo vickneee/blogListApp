@@ -1,4 +1,5 @@
 const Blog = require("../models/blogModel");
+const User = require("../models/userModel");
 const express = require("express");
 
 const app = express();
@@ -43,14 +44,24 @@ const createBlog = app.post('/api/blogs', async (request, response) => {
     return response.status(400).send({ error: 'title or url missing' });
   }
   try {
+    // Find the first user in the database
+    const user = await User.findOne();
+
     const newBlog = new Blog({
       title: request.body.title,
       author: request.body.author,
       url: request.body.url,
-      likes: request.body.likes || 0
-  });
-  const savedBlog = await newBlog.save();
-  response.status(201).json(savedBlog);
+      likes: request.body.likes || 0,
+      user: user._id, // assign the user as the creator of the blog
+    });
+
+    const savedBlog = await newBlog.save();
+
+    // Add the blog to the user's list of blogs
+    user.blogs = user.blogs.concat(savedBlog._id);
+    await user.save();
+
+    response.status(201).json(savedBlog);
   }
   catch (error) {
     console.log(error);
