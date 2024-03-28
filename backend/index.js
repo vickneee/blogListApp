@@ -4,6 +4,7 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 const dotenv = require('dotenv')
 const {getHomePage, createBlog, getAllBlogs, getSingleBlog, deleteBlog, updateBlog} = require("./controllers/blogController");
+const {createUser, getAllUsers} = require("./controllers/userController");
 
 // Load env variables
 dotenv.config()
@@ -28,7 +29,8 @@ app.get('/api/blogs/:id', getSingleBlog);
 app.post('/api/blogs', createBlog);
 app.delete('/api/blogs/:id', deleteBlog);
 app.put('/api/blogs/:id', updateBlog);
-
+app.get('/api/users/', getAllUsers);
+app.post('/api/users/', createUser);
 
 module.exports = app;
 
