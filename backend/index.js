@@ -5,6 +5,7 @@ const mongoose = require('mongoose')
 const dotenv = require('dotenv')
 const {getHomePage, createBlog, getAllBlogs, getSingleBlog, deleteBlog, updateBlog} = require("./controllers/blogController");
 const {createUser, getAllUsers} = require("./controllers/userController");
+const {loginUser} = require("./controllers/authController");
 
 // Load env variables
 dotenv.config()
@@ -31,6 +32,7 @@ app.delete('/api/blogs/:id', deleteBlog);
 app.put('/api/blogs/:id', updateBlog);
 app.get('/api/users/', getAllUsers);
 app.post('/api/users/', createUser);
+app.post('/api/login', loginUser);
 
 module.exports = app;
 
