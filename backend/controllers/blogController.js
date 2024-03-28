@@ -52,7 +52,11 @@ const createBlog = app.post('/api/blogs', async (request, response) => {
       author: request.body.author,
       url: request.body.url,
       likes: request.body.likes || 0,
-      user: user._id, // assign the user as the creator of the blog
+      user: {
+        _id: user._id,
+        username: user.username,
+        name: user.name
+      } // assign the user as the creator of the blog
     });
 
     const savedBlog = await newBlog.save();
