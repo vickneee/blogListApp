@@ -4,15 +4,24 @@ const bcrypt = require('bcryptjs')
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
-    required: true,
+    required: [true, 'Username is required'],
     unique: true,
-    minlength: 3
+    minlength: [3, 'Username must be at least 3 characters long'],
   },
-  name: String,
-  passwordHash: String,
+  name: {
+    type: String,
+  },
+  passwordHash: {
+    type: String,
+    required: [true, 'Password is required'],
+  },
 })
 
 userSchema.methods.setPassword = async function(password) {
+  if (password.length < 3) {
+    throw new Error('Password must be at least 3 characters long')
+  }
+
   const saltRounds = 10
   this.passwordHash = await bcrypt.hash(password, saltRounds)
 }
