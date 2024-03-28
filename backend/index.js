@@ -29,7 +29,7 @@ app.get('/', getHomePage);
 app.get('/api/blogs', getAllBlogs);
 app.get('/api/blogs/:id', getSingleBlog);
 app.post('/api/blogs', checkToken, createBlog);
-app.delete('/api/blogs/:id', deleteBlog);
+app.delete('/api/blogs/:id', checkToken, deleteBlog);
 app.put('/api/blogs/:id', updateBlog);
 app.get('/api/users/', getAllUsers);
 app.post('/api/users/', createUser);
