@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs.jsx'
 import LoginForm from "./components/LoginForm.jsx";
+import CreateBlogForm from "./components/CreateBlogForm.jsx";
 import loginService from './services/login'
 
 const App = () => {
@@ -41,6 +42,15 @@ const App = () => {
     setUser(null) //Set the user to null
   }
 
+  const handleCreate = async (blog, token) => {
+    try {
+      const newBlog = await blogService.create(blog, token)
+      setBlogs(blogs.concat(newBlog))
+    } catch (exception) {
+      console.log('Error creating blog', exception)
+    }
+  }
+
   if (user === null) {
     return <LoginForm handleLogin={handleLogin} />
 
@@ -50,6 +60,7 @@ const App = () => {
     <div>
       <h2>Blogs</h2>
       <p>{user.name} logged in {/*Display the user's name*/}<button onClick={handleLogout}>Logout</button></p> {/*Add logout button*/}
+      <CreateBlogForm handleCreate={handleCreate} user={user}/><br></br>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}

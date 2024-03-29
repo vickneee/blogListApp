@@ -12,6 +12,12 @@ const checkToken = (request, response, next) => {
     return response.status(401).json({ error: new jwt.JsonWebTokenError('jwt must be provided') });
   }
 
+  try {
+    jwt.verify(token, process.env.SECRET);
+  } catch (error) {
+    return response.status(401).json({ error: error });
+  }
+
   request.token = token;
   next();
 };
