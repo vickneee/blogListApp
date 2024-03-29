@@ -1,17 +1,24 @@
 import { useState } from 'react';
+import Notification from "./Notifications.jsx";
 
 const LoginForm = ({handleLogin}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState(null);
 
-  const submit = (event) => {
+  const submit = async (event) => {
     event.preventDefault();
-    handleLogin(username, password);
+    await handleLogin(username, password);
+    setErrorMessage('Wrong username or password');
+    setTimeout(() => {
+      setErrorMessage(null); // Clear the error message after 5 seconds
+    }, 5000);
   };
 
   return (
     <div>
       <h2>Log in to application</h2>
+      <Notification className="error" message={errorMessage}/>
       <form onSubmit={submit}>
         <div>
           Username
