@@ -4,12 +4,10 @@ import blogService from './services/blogs.jsx'
 import LoginForm from "./components/LoginForm.jsx";
 import CreateBlogForm from "./components/CreateBlogForm.jsx";
 import loginService from './services/login'
-import Notification from "./components/Notifications.jsx";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
-  const [errorMessage, setErrorMessage] = useState(null);
 
 
   useEffect(() => {
@@ -36,7 +34,6 @@ const App = () => {
       window.localStorage.setItem('loggedBlogAppUser', JSON.stringify(user)) // Save the user to local storage
       setUser(user)
     } catch (exception) {
-      setErrorMessage('Wrong username or password') // Display an error message
       console.log('Wrong credentials')
     }
   }
