@@ -38,7 +38,7 @@ const Blog = ({blog: initialBlog}) => {
       <div style={showWhenVisible}>
         <p>Blog url: {blog.url}</p>
         <p>Likes: {blog.likes} <button onClick={handleLike}>like</button></p>
-        {blog.user ? <p>{blog.user.name}</p> : <p>No user associated with this blog</p>}
+        <p>{blog.user.name}</p>
 
       </div>
     </div>

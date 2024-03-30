@@ -25,9 +25,9 @@ const getAllBlogs = app.get('/api/blogs', async (request, response) => {
 })
 
 // Get a single blog
-const getSingleBlog = app.get('/api/blogs/:id', async (request, response) => {
+const getBlog = app.get('/api/blogs/:id', async (request, response) => {
   try {
-    const blog = await Blog.findById(request.params.id);
+    const blog = await Blog.findById(request.params.id).populate('User', {username: 1, name: 1});
     if (blog) {
       response.json(blog);
     } else {
@@ -131,7 +131,7 @@ const updateBlog = app.put('/api/blogs/:id', async (request, response) => {
 module.exports = {
   getHomePage,
   getAllBlogs,
-  getSingleBlog,
+  getBlog,
   createBlog,
   deleteBlog,
   updateBlog

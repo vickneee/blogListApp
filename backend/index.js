@@ -3,7 +3,7 @@ const app = express()
 const cors = require('cors')
 const mongoose = require('mongoose')
 const dotenv = require('dotenv')
-const {getHomePage, createBlog, getAllBlogs, getSingleBlog, deleteBlog, updateBlog} = require("./controllers/blogController");
+const {getHomePage, createBlog, getAllBlogs, getBlog, deleteBlog, updateBlog} = require("./controllers/blogController");
 const {createUser, getAllUsers, getUser} = require("./controllers/userController");
 const {loginUser} = require("./controllers/authController");
 const checkToken = require('./utils/checkToken')
@@ -27,7 +27,7 @@ mongoose.connect(MONGODB_URI)
 // Routes
 app.get('/', getHomePage);
 app.get('/api/blogs', getAllBlogs);
-app.get('/api/blogs/:id', getSingleBlog);
+app.get('/api/blogs/:id', getBlog);
 app.post('/api/blogs', checkToken, createBlog);
 app.delete('/api/blogs/:id', checkToken, deleteBlog);
 app.put('/api/blogs/:id', updateBlog);
