@@ -27,7 +27,7 @@ const getAllBlogs = app.get('/api/blogs', async (request, response) => {
 
 // Get a single blog
 const getBlog = app.get('/api/blogs/:id', async (request, response) => {
-    const blog = await Blog.findById(request.params.id).populate('user', {username: 1, name: 1});
+    const blog = await Blog.findById(request.params.id).populate('user');
 
     if (blog) {
       response.json(blog);
