@@ -4,7 +4,7 @@ Helsingin Yliopiston Full Stack MOOC submission repository. BlogList App with a 
 
 ## Tech & Tools 
 
-- - Vite + React
+- Vite + React
 - Node.js
 - Express.js
 - MongoDB
