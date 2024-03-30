@@ -10,4 +10,6 @@ Helsingin Yliopiston Full Stack MOOC submission repository. BlogList App with a 
 - MongoDB
 - IntelliJ
 - Postman
+<!--
 - - Render
+    -->
