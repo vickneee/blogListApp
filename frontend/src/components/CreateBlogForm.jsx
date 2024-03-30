@@ -45,7 +45,7 @@ const CreateBlogForm = ({ handleCreate, user }) => {
           />
         </div>
         <div>
-          URL
+          Url
           <br></br>
           <input
             type="text"

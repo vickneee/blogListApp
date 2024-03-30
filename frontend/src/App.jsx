@@ -1,9 +1,12 @@
-import { useState, useEffect } from 'react'
+import {useState, useEffect} from 'react'
 import Blog from './components/Blog'
 import LoginForm from "./components/LoginForm.jsx";
 import CreateBlogForm from "./components/CreateBlogForm.jsx";
 import blogService from './services/blogs.jsx'
 import loginService from './services/login'
+import {useRef} from 'react'
+import Toggle from "./components/Toggle.jsx";
+
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -47,22 +50,30 @@ const App = () => {
     try {
       const newBlog = await blogService.create(blog, token)
       setBlogs(blogs.concat(newBlog))
+      blogFormRef.current.toggleVisibility() // Close the form after creating a blog
     } catch (exception) {
       console.log('Error creating blog', exception)
     }
   }
 
+  const blogFormRef = useRef() // Create a reference to the blog form
+
   if (user === null) {
-    return <LoginForm handleLogin={handleLogin} />
+    return <LoginForm handleLogin={handleLogin}/>
   }
 
   return (
     <div>
       <h2>Blogs</h2>
-      <p>{user.name} logged in {/*Display the user's name*/}<button onClick={handleLogout}>Logout</button></p> {/*Add logout button*/}
-      <CreateBlogForm handleCreate={handleCreate} user={user}/><br></br>
+      <p>{user.name} logged in {/*Display the user's name*/}
+        <button onClick={handleLogout}>Logout</button>
+      </p>
+      {/*Add logout button*/}
+      <Toggle buttonLabel="Create new blog" ref={blogFormRef}>
+        <CreateBlogForm handleCreate={handleCreate} user={user}/><br></br>
+      </Toggle><br/>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog}/>
       )}
     </div>
   )
