@@ -69,7 +69,7 @@ const App = () => {
         <button onClick={handleLogout}>Logout</button>
       </p>
       {/*Add logout button*/}
-      <Toggle buttonLabel="Create new blog" ref={blogFormRef}>
+      <Toggle buttonLabel="Create new blog" ref={blogFormRef}> // Toggle props.buttonLabel to "Create new blog"
         <CreateBlogForm handleCreate={handleCreate} user={user}/><br></br>
       </Toggle><br/>
       {blogs.map(blog =>
