@@ -17,7 +17,8 @@ const getHomePage = app.get('/', async (request, response) => {
 // Get all blogs
 const getAllBlogs = app.get('/api/blogs', async (request, response) => {
   try {
-    const blogs = await Blog.find({});
+    let blogs = await Blog.find({});
+    blogs = blogs.sort((a, b) => b.likes - a.likes); // Sort the blogs by likes
     response.json(blogs);
   } catch (error) {
     console.log(error);
@@ -26,16 +27,13 @@ const getAllBlogs = app.get('/api/blogs', async (request, response) => {
 
 // Get a single blog
 const getBlog = app.get('/api/blogs/:id', async (request, response) => {
-  try {
-    const blog = await Blog.findById(request.params.id).populate('User', {username: 1, name: 1});
+    const blog = await Blog.findById(request.params.id).populate('user', {username: 1, name: 1});
+
     if (blog) {
       response.json(blog);
     } else {
       response.status(404).end();
     }
-  } catch (error) {
-    console.log(error);
-  }
 });
 
 // Create a new blog
