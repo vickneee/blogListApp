@@ -23,7 +23,17 @@ const getAllUsers = async (req, res) => {
   res.json(users)
 }
 
+const getUser = async (req, res) => {
+  const user = await User.findById(req.params.id)
+  if (user) {
+    res.json(user)
+  } else {
+    res.status(404).end()
+  }
+}
+
 module.exports = {
   createUser,
-  getAllUsers
+  getAllUsers,
+  getUser
 }

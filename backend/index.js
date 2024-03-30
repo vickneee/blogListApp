@@ -4,7 +4,7 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 const dotenv = require('dotenv')
 const {getHomePage, createBlog, getAllBlogs, getSingleBlog, deleteBlog, updateBlog} = require("./controllers/blogController");
-const {createUser, getAllUsers} = require("./controllers/userController");
+const {createUser, getAllUsers, getUser} = require("./controllers/userController");
 const {loginUser} = require("./controllers/authController");
 const checkToken = require('./utils/checkToken')
 
@@ -33,6 +33,7 @@ app.delete('/api/blogs/:id', checkToken, deleteBlog);
 app.put('/api/blogs/:id', updateBlog);
 app.get('/api/users/', getAllUsers);
 app.post('/api/users/', createUser);
+app.get('/api/users/:id', getUser);
 app.post('/api/login', loginUser);
 
 module.exports = app;
